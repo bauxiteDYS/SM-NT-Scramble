@@ -1,9 +1,8 @@
 #include <sourcemod>
 #include <sdktools>
 #include <neotokyo>
-	
+
 bool DoScramble[32+1];
-bool TeamJin = true;
 bool Cooldown;
 
 public Plugin myinfo =
@@ -11,20 +10,21 @@ public Plugin myinfo =
 	name = "NT Scramble",
 	description = "Use !scramble",
 	author = "bauxite",
-	version = "0.1.0",
-	url = "https://github.com/bauxiteDYS/SM-NT-Scramble",
+	version = "0.1.3",
+	url = "https://discord.gg/afhZuFB9A5",
 }
 
 public OnPluginStart()
 {
-	RegAdminCmd("sm_scramble", Command_Scramble, ADMFLAG_GENERIC);	
+	RegAdminCmd("sm_scramble", Command_Scramble, ADMFLAG_GENERIC);
+	Cooldown = false;
 }
 
 public Action Command_Scramble(int client, int args)	
 {	
-
-	if(client <= 0)
+	if(client == 0)
 	{
+		ReplyToCommand(client, "No");
 		return Plugin_Stop;
 	}
 	
@@ -39,50 +39,59 @@ public Action Command_Scramble(int client, int args)
 		ReplyToCommand(client, "Scramble is on cooldown, wait 10s");
 		return Plugin_Stop;
 	}
-	
-	int iRandomPlayer;
-	int count;
+
+	bool TeamJin;
 	
 	for (int i = 1; i <= 32; i++) 
-    	{ 
+    { 
 		DoScramble[i] = false;
 		
-		if (IsClientValid(i) && GetClientTeam(i) > 1)
-		{ 
-			DoScramble[i] = true;
-			count++;
-		} 
+		if(IsClientInGame(i))
+		{
+			if (GetClientTeam(i) > 1)
+			{ 
+				DoScramble[i] = true;
+			} 
+		}
 	}
 	
-	for (int i = 1; i <= count; i++) 
-   	 { 
+	int RandPlayer;
 		
-		iRandomPlayer = GetRandomPlayer();
+	for (int b = 1; b <= 32; b++) 
+    { 
+		RandPlayer = GetRandomPlayer();
 		
-		if(iRandomPlayer > 0)
+		DoScramble[RandPlayer] = false;
+		
+		if(RandPlayer > 0)
 		{
-			DoScramble[iRandomPlayer] = false;
+			//PrintToConsoleAll("Player %d", RandPlayer);
 			
-			if(IsPlayerAlive(iRandomPlayer))
+			if(IsClientInGame(RandPlayer))
 			{
-				KillWithoutXpLoss(iRandomPlayer);
-			}
+				if(IsPlayerAlive(RandPlayer))
+				{
+					KillWithoutXpLoss(RandPlayer);
+				}
 				
-			switch(TeamJin)
-			{
-				case true:
-				{	
-					FakeClientCommand(iRandomPlayer, "jointeam 2"); 
-					TeamJin = false;
-				}
-				case false:
-				{	
-					FakeClientCommand(iRandomPlayer, "jointeam 3"); 
-					TeamJin = true;
-				}
+				switch(TeamJin)
+				{
+					case true:
+					{	
+						FakeClientCommand(RandPlayer, "jointeam 2"); 
+						TeamJin = false;
+					}
+					case false:
+					{	
+						FakeClientCommand(RandPlayer, "jointeam 3"); 
+						TeamJin = true;
+					}
+				}	
 			}
 		}
     } 
+	
+	//PrintToConsoleAll("scrambled");
 	
 	Cooldown = true;
 	
@@ -91,6 +100,33 @@ public Action Command_Scramble(int client, int args)
 	return Plugin_Handled;
 }		
 
+
+int GetRandomPlayer()
+{
+	int count;
+	int List[32+1]; 
+		
+	for (int a = 1; a <= 32; a++) 
+    { 
+		if (IsClientInGame(a) && DoScramble[a])
+		{ 
+			List[++count] = a;
+		} 
+	}
+	
+	if(count == 0)
+	{
+		return 0;
+	}
+	
+	if(count > 0)
+	{
+		return List[GetRandomInt(1,count)];
+	}
+	
+	return 0;
+}
+	
 public Action ResetCooldown(Handle timer)
 {
 	Cooldown = false;
@@ -98,30 +134,6 @@ public Action ResetCooldown(Handle timer)
 	return Plugin_Stop;
 }
 
-stock int GetRandomPlayer() 
-{ 
-	int clients[32+1]; 
-	int clientCount; 
-	for (int i = 1; i <= 32; i++) 
-	{ 
-		if (IsClientValid(i) && DoScramble[i] == true)
-		{ 
-			clients[clientCount++] = i; 
-		} 
-	} 
-	return (clientCount == 0) ? -1 : clients[GetRandomInt(0, clientCount)]; 
-}
-
-
-stock bool:IsClientValid(i)
-{
-	if(i > 0 && i <= MaxClients && IsClientInGame(i) && IsClientConnected(i) && ! IsClientSourceTV(i))
-	{
-		return true;
-	}
-	
-	return false;
-}
 
 void KillWithoutXpLoss(int client)
 {
