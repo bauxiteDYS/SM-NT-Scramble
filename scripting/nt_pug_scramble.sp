@@ -44,7 +44,7 @@ public Action Command_Scramble(int client, int args)
 	int count;
 	
 	for (int i = 1; i <= 32; i++) 
-    { 
+    	{ 
 		DoScramble[i] = false;
 		
 		if (IsClientValid(i) && GetClientTeam(i) > 1)
@@ -55,7 +55,7 @@ public Action Command_Scramble(int client, int args)
 	}
 	
 	for (int i = 1; i <= count; i++) 
-    { 
+   	 { 
 		
 		iRandomPlayer = GetRandomPlayer();
 		
@@ -63,21 +63,21 @@ public Action Command_Scramble(int client, int args)
 		{
 			DoScramble[iRandomPlayer] = false;
 			
-			if(IsPlayerAlive(i))
+			if(IsPlayerAlive(iRandomPlayer))
 			{
-				KillWithoutXpLoss(i);
+				KillWithoutXpLoss(iRandomPlayer);
 			}
 				
 			switch(TeamJin)
 			{
 				case true:
 				{	
-					FakeClientCommand(i, "jointeam 2"); 
+					FakeClientCommand(iRandomPlayer, "jointeam 2"); 
 					TeamJin = false;
 				}
 				case false:
 				{	
-					FakeClientCommand(i, "jointeam 3"); 
+					FakeClientCommand(iRandomPlayer, "jointeam 3"); 
 					TeamJin = true;
 				}
 			}
