@@ -8,7 +8,7 @@ bool Cooldown;
 public Plugin myinfo =
 {	
 	name = "NT Scramble",
-	description = "Use !scramble",
+	description = "Scramble",
 	author = "bauxite",
 	version = "0.1.3",
 	url = "https://discord.gg/afhZuFB9A5",
@@ -107,7 +107,7 @@ int GetRandomPlayer()
 	int List[32+1]; 
 		
 	for (int a = 1; a <= 32; a++) 
-    { 
+	{ 
 		if (IsClientInGame(a) && DoScramble[a])
 		{ 
 			List[++count] = a;
