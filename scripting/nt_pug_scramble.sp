@@ -43,7 +43,7 @@ public Action Command_Scramble(int client, int args)
 	bool TeamJin;
 	
 	for (int i = 1; i <= 32; i++) 
-    { 
+	{ 
 		DoScramble[i] = false;
 		
 		if(IsClientInGame(i))
@@ -58,7 +58,7 @@ public Action Command_Scramble(int client, int args)
 	int RandPlayer;
 		
 	for (int b = 1; b <= 32; b++) 
-    { 
+	{ 
 		RandPlayer = GetRandomPlayer();
 		
 		DoScramble[RandPlayer] = false;
@@ -89,7 +89,7 @@ public Action Command_Scramble(int client, int args)
 				}	
 			}
 		}
-    } 
+	} 
 	
 	//PrintToConsoleAll("scrambled");
 	
