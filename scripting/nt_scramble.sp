@@ -5,12 +5,13 @@
 bool DoScramble[32+1];
 bool Cooldown;
 
+
 public Plugin myinfo =
 {	
 	name = "NT Scramble",
 	description = "Scramble",
 	author = "bauxite",
-	version = "0.1.5",
+	version = "0.1.7",
 	url = "https://discord.gg/afhZuFB9A5",
 }
 
@@ -41,6 +42,12 @@ public Action Command_Scramble(int client, int args)
 	}
 
 	bool TeamJin;
+	bool FromSpec;
+	
+	if(GetTeamClientCount(1) > (GetTeamClientCount(2) + GetTeamClientCount(3)))
+	{
+		FromSpec = true;
+	}
 	
 	for (int i = 1; i <= MaxClients; i++) 
 	{ 
@@ -48,10 +55,20 @@ public Action Command_Scramble(int client, int args)
 		
 		if(IsClientInGame(i))
 		{
-			if (GetClientTeam(i) > 1)
-			{ 
-				DoScramble[i] = true;
-			} 
+			if(!FromSpec)
+			{
+				if (GetClientTeam(i) > 1)
+				{ 
+					DoScramble[i] = true;
+				} 
+			}
+			else if(FromSpec)
+			{
+				if (GetClientTeam(i) == 1)
+				{
+					DoScramble[i] = true;	 
+				}
+			}
 		}
 	}
 	
@@ -112,11 +129,6 @@ int GetRandomPlayer()
 		{ 
 			List[++count] = a;
 		} 
-	}
-	
-	if(count == 0)
-	{
-		return 0;
 	}
 	
 	if(count > 0)
