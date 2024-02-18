@@ -5,7 +5,6 @@
 bool DoScramble[32+1];
 bool Cooldown;
 
-
 public Plugin myinfo =
 {	
 	name = "NT Scramble",
@@ -37,7 +36,7 @@ public Action Command_Scramble(int client, int args)
 	
 	if (Cooldown)
 	{
-		ReplyToCommand(client, "Scramble is on cooldown, wait 10s");
+		ReplyToCommand(client, "Scramble is on cooldown, wait 5s");
 		return Plugin_Stop;
 	}
 
@@ -112,7 +111,7 @@ public Action Command_Scramble(int client, int args)
 	
 	Cooldown = true;
 	
-	CreateTimer(10.0, ResetCooldown, _, TIMER_FLAG_NO_MAPCHANGE);
+	CreateTimer(5.0, ResetCooldown, _, TIMER_FLAG_NO_MAPCHANGE);
 	
 	return Plugin_Handled;
 }		
