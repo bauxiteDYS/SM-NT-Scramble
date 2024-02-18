@@ -10,7 +10,7 @@ public Plugin myinfo =
 	name = "NT Scramble",
 	description = "Scramble",
 	author = "bauxite",
-	version = "0.1.3",
+	version = "0.1.5",
 	url = "https://discord.gg/afhZuFB9A5",
 }
 
@@ -42,7 +42,7 @@ public Action Command_Scramble(int client, int args)
 
 	bool TeamJin;
 	
-	for (int i = 1; i <= 32; i++) 
+	for (int i = 1; i <= MaxClients; i++) 
 	{ 
 		DoScramble[i] = false;
 		
@@ -57,7 +57,7 @@ public Action Command_Scramble(int client, int args)
 	
 	int RandPlayer;
 		
-	for (int b = 1; b <= 32; b++) 
+	for (int b = 1; b <= MaxClients; b++) 
 	{ 
 		RandPlayer = GetRandomPlayer();
 		
@@ -106,7 +106,7 @@ int GetRandomPlayer()
 	int count;
 	int List[32+1]; 
 		
-	for (int a = 1; a <= 32; a++) 
+	for (int a = 1; a <= MaxClients; a++) 
 	{ 
 		if (IsClientInGame(a) && DoScramble[a])
 		{ 
