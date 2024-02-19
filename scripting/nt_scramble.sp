@@ -30,7 +30,7 @@ public Action Command_Scramble(int client, int args)
 	
 	if (args > 0) 
 	{
-		PrintToChat(client, "use !scramble to randomise players in teams");
+		ReplyToCommand(client, "use !scramble to randomise players in teams");
 		return Plugin_Stop;
 	}
 	
